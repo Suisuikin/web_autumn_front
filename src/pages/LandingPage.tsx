@@ -1,3 +1,4 @@
+// src/pages/LandingPage.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -10,36 +11,72 @@ const LandingPage: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Стили для кнопок навигации
+  const navButtonStyle: React.CSSProperties = {
+    textDecoration: 'none',
+    color: '#33290A',
+    fontWeight: 'bold',
+    fontSize: '16px',
+    padding: '10px 20px',
+    borderRadius: '25px',
+    border: '2px solid #33290A',
+    transition: 'all 0.2s ease',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    cursor: 'pointer',
+  };
+
   return (
-    <div style={{ backgroundColor: '#F0EDE3', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: '#F0EDE3', minHeight: '100vh', fontFamily: 'sans-serif' }}>
       {/* HEADER */}
       <header className="shadow-element" style={{
-        height: '160px',
+        height: '120px',
         backgroundColor: 'white',
-        padding: '20px',
+        padding: '0 40px',
         marginBottom: '0',
-        textAlign: 'center',
-        borderRadius: '0 0 10px 10px',
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        position: 'relative',
+        zIndex: 10,
       }}>
-        <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
           <h1 style={{
-            fontSize: '42px',
+            fontSize: '32px',
             color: '#33290A',
             fontWeight: 'bold',
             margin: 0,
           }}>
             Chrono Archives
           </h1>
-        </a>
+        </Link>
+
+        <nav style={{ display: 'flex', gap: '15px' }}>
+          <Link
+            to="/"
+            style={{
+              ...navButtonStyle,
+              border: 'none',
+              fontSize: '18px'
+            }}
+          >
+            Главная
+          </Link>
+          <Link
+            to="/chrono"
+            style={navButtonStyle}
+          >
+            Летопись
+          </Link>
+        </nav>
       </header>
 
       {/* HERO SECTION */}
       <section style={{
         textAlign: 'center',
-        padding: '80px 40px',
+        padding: '60px 20px 40px',
         backgroundColor: '#F0EDE3',
       }}>
         <div style={{
@@ -68,11 +105,58 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
+      {/* WELCOME / HOW TO USE SECTION (БЕЗ СТРЕЛОК) */}
+      <section style={{
+        maxWidth: '1000px',
+        margin: '0 auto 60px',
+        padding: '0 20px',
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+            <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#33290A', marginBottom: '10px' }}>
+              Добро пожаловать!
+            </h3>
+        </div>
+
+        <div className="shadow-element" style={{
+            backgroundColor: 'white',
+            borderRadius: '20px',
+            padding: '40px 60px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 8px 20px 8px rgba(204, 200, 184, 0.3)', // Сделал тень мягче
+        }}>
+            <div style={{ width: '100%', textAlign: 'center' }}>
+                <h4 style={{
+                    fontSize: '24px',
+                    fontWeight: 'bold',
+                    marginBottom: '30px',
+                    color: '#33290A'
+                }}>
+                    Как использовать
+                </h4>
+
+                <div style={{
+                    textAlign: 'left',
+                    display: 'inline-block',
+                    fontSize: '18px',
+                    color: '#333',
+                    lineHeight: '2.2'
+                }}>
+                    <div>1. Перейдите в раздел <Link to="/chrono" style={{color: '#B39223', fontWeight: 'bold', textDecoration: 'none'}}>"Летопись"</Link></div>
+                    <div>2. Выберите интересующий Вас исторический период</div>
+                    <div>3. Изучите детальную информацию и документы</div>
+                    <div>4. Создайте заявку на хронологический анализ текста</div>
+                </div>
+            </div>
+        </div>
+      </section>
+
       {/* FEATURES */}
       <section style={{
         backgroundColor: 'white',
         padding: '80px 40px',
-        margin: '40px auto',
+        margin: '40px auto 80px', // Увеличил отступ снизу перед футером
         borderRadius: '10px',
         maxWidth: '1200px',
         boxShadow: '0 8px 20px 8px rgba(204, 200, 184, 0.5)',
@@ -98,15 +182,6 @@ const LandingPage: React.FC = () => {
             backgroundColor: '#F0EDE3',
             borderRadius: '10px',
             textAlign: 'center',
-            transition: 'all 0.3s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-5px)';
-            e.currentTarget.style.boxShadow = '0 12px 25px 10px rgba(204, 200, 184, 0.6)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = 'none';
           }}>
             <div style={{ fontSize: '48px', marginBottom: '20px' }}>📚</div>
             <h4 style={{
@@ -132,15 +207,6 @@ const LandingPage: React.FC = () => {
             backgroundColor: '#F0EDE3',
             borderRadius: '10px',
             textAlign: 'center',
-            transition: 'all 0.3s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-5px)';
-            e.currentTarget.style.boxShadow = '0 12px 25px 10px rgba(204, 200, 184, 0.6)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = 'none';
           }}>
             <div style={{ fontSize: '48px', marginBottom: '20px' }}>🔍</div>
             <h4 style={{
@@ -166,15 +232,6 @@ const LandingPage: React.FC = () => {
             backgroundColor: '#F0EDE3',
             borderRadius: '10px',
             textAlign: 'center',
-            transition: 'all 0.3s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-5px)';
-            e.currentTarget.style.boxShadow = '0 12px 25px 10px rgba(204, 200, 184, 0.6)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = 'none';
           }}>
             <div style={{ fontSize: '48px', marginBottom: '20px' }}>📊</div>
             <h4 style={{
@@ -196,215 +253,28 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section style={{
-        backgroundColor: '#F0EDE3',
-        padding: '80px 40px',
-      }}>
-        <h3 style={{
-          fontSize: '42px',
-          fontWeight: '800',
-          color: '#33290A',
-          textAlign: 'center',
-          marginBottom: '60px',
-        }}>
-          Как это работает
-        </h3>
-
-        <div style={{
-          maxWidth: '1000px',
-          margin: '0 auto',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '60px',
-        }}>
-          {/* STEP 1 */}
-          <div style={{ flex: 1, textAlign: 'center' }}>
-            <div style={{
-              width: '80px',
-              height: '80px',
-              backgroundColor: '#B39223',
-              color: 'white',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '40px',
-              fontWeight: 'bold',
-              margin: '0 auto 20px',
-              boxShadow: '0 8px 20px 8px rgba(204, 200, 184, 0.5)',
-            }}>
-              1
-            </div>
-            <h4 style={{
-              fontSize: '22px',
-              fontWeight: '800',
-              color: '#33290A',
-              marginBottom: '10px',
-            }}>
-              Загрузить текст
-            </h4>
-            <p style={{
-              fontSize: '16px',
-              color: '#675E45',
-              lineHeight: 1.6,
-            }}>
-              Введите или загрузите текст для анализа
-            </p>
-          </div>
-
-          <div style={{ fontSize: '36px', color: '#B39223', marginBottom: '30px' }}>→</div>
-
-          {/* STEP 2 */}
-          <div style={{ flex: 1, textAlign: 'center' }}>
-            <div style={{
-              width: '80px',
-              height: '80px',
-              backgroundColor: '#B39223',
-              color: 'white',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '40px',
-              fontWeight: 'bold',
-              margin: '0 auto 20px',
-              boxShadow: '0 8px 20px 8px rgba(204, 200, 184, 0.5)',
-            }}>
-              2
-            </div>
-            <h4 style={{
-              fontSize: '22px',
-              fontWeight: '800',
-              color: '#33290A',
-              marginBottom: '10px',
-            }}>
-              Анализировать
-            </h4>
-            <p style={{
-              fontSize: '16px',
-              color: '#675E45',
-              lineHeight: 1.6,
-            }}>
-              Система анализирует историческую принадлежность
-            </p>
-          </div>
-
-          <div style={{ fontSize: '36px', color: '#B39223', marginBottom: '30px' }}>→</div>
-
-          {/* STEP 3 */}
-          <div style={{ flex: 1, textAlign: 'center' }}>
-            <div style={{
-              width: '80px',
-              height: '80px',
-              backgroundColor: '#B39223',
-              color: 'white',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '40px',
-              fontWeight: 'bold',
-              margin: '0 auto 20px',
-              boxShadow: '0 8px 20px 8px rgba(204, 200, 184, 0.5)',
-            }}>
-              3
-            </div>
-            <h4 style={{
-              fontSize: '22px',
-              fontWeight: '800',
-              color: '#33290A',
-              marginBottom: '10px',
-            }}>
-              Получить отчет
-            </h4>
-            <p style={{
-              fontSize: '16px',
-              color: '#675E45',
-              lineHeight: 1.6,
-            }}>
-              Скачайте подробный отчет результатов
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section style={{
-        backgroundColor: 'white',
-        padding: '80px 40px',
-        margin: '40px auto',
-        borderRadius: '10px',
-        maxWidth: '1200px',
-        textAlign: 'center',
-        boxShadow: '0 8px 20px 8px rgba(204, 200, 184, 0.5)',
-      }}>
-        <h3 style={{
-          fontSize: '42px',
-          fontWeight: '800',
-          color: '#33290A',
-          marginBottom: '20px',
-        }}>
-          Готовы начать?
-        </h3>
-        <p style={{
-          fontSize: '20px',
-          color: '#675E45',
-          marginBottom: '40px',
-          lineHeight: 1.6,
-        }}>
-          Присоединитесь к исследователям, которые используют Chrono Archives для анализа исторических текстов
-        </p>
-        <Link to="/chrono" style={{
-          display: 'inline-block',
-          padding: '18px 48px',
-          backgroundColor: '#B39223',
-          color: 'white',
-          fontSize: '20px',
-          fontWeight: 'bold',
-          borderRadius: '10px',
-          textDecoration: 'none',
-          boxShadow: '0 8px 20px 8px rgba(204, 200, 184, 0.5)',
-          transition: 'all 0.3s ease',
-          border: 'none',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = '#A08219';
-          e.currentTarget.style.transform = 'translateY(-2px)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = '#B39223';
-          e.currentTarget.style.transform = 'translateY(0)';
-        }}>
-          Начать сейчас
-        </Link>
-      </section>
-
-      {/* FOOTER */}
+      {/* FOOTER (ОБНОВЛЕННЫЙ) */}
       <footer style={{
         backgroundColor: '#33290A',
         color: '#F0EDE3',
         textAlign: 'center',
-        padding: '40px',
+        padding: '50px 20px',
         fontSize: '16px',
+        borderTop: '4px solid #B39223', // Добавил золотую линию сверху для стиля
       }}>
-        <p>© 2025 Chrono Archives. Все права защищены.</p>
-        <p style={{ marginTop: '10px', fontSize: '14px', opacity: 0.8 }}>
-          Исторический анализ текстов через хронологическую классификацию
+        <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '24px', opacity: 0.9 }}>
+          Chrono Archives
+        </div>
+        <p>© 2025 Все права защищены.</p>
+        <p style={{ marginTop: '10px', fontSize: '14px', opacity: 0.6, maxWidth: '600px', margin: '10px auto 0' }}>
+          Проект разработан для анализа исторических текстов с использованием современных алгоритмов обработки естественного языка и обширной хронологической базы данных.
         </p>
       </footer>
 
       <style>{`
         @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </div>

@@ -1,4 +1,3 @@
-// src/pages/LayerDetailPage.tsx
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
@@ -37,6 +36,60 @@ const LayerDetailPage: React.FC = () => {
     loadLayer();
   }, [id]);
 
+  // Стили для шапки (Header) - дублируем, чтобы выглядело одинаково
+  const navButtonStyle: React.CSSProperties = {
+    textDecoration: 'none',
+    color: '#33290A',
+    fontWeight: 'bold',
+    fontSize: '16px',
+    padding: '10px 20px',
+    borderRadius: '25px',
+    border: '2px solid #33290A',
+    transition: 'all 0.2s ease',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  };
+
+  const renderHeader = () => (
+    <header
+      className="shadow-element"
+      style={{
+        height: '120px',
+        backgroundColor: 'white',
+        padding: '0 40px',
+        marginBottom: '30px',
+        borderRadius: '0 0 10px 10px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <h1 style={{ fontSize: '32px', color: '#33290A', fontWeight: 'bold', margin: 0 }}>
+          Chrono Archives
+        </h1>
+      </Link>
+
+      <nav style={{ display: 'flex', gap: '15px' }}>
+        <Link
+          to="/landing"
+          style={{
+            ...navButtonStyle,
+            border: 'none',
+            fontSize: '18px'
+          }}
+        >
+          Главная
+        </Link>
+        <Link to="/chrono" style={navButtonStyle}>
+          Летопись
+        </Link>
+      </nav>
+    </header>
+  );
+
   const wordsList = layer?.words?.split(',').map((w) => w.trim()).filter((w) => w.length > 0) ?? [];
 
   const getYears = () => {
@@ -70,27 +123,8 @@ const LayerDetailPage: React.FC = () => {
   if (loading) {
     return (
       <div className="container">
-        <header
-          className="shadow-element"
-          style={{
-            height: '160px',
-            backgroundColor: 'white',
-            padding: '20px',
-            marginBottom: '30px',
-            textAlign: 'center',
-            borderRadius: '0 0 10px 10px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <h1 style={{ fontSize: '42px', color: '#33290A', fontWeight: 'bold', margin: 0 }}>
-              Chrono Archives
-            </h1>
-          </Link>
-        </header>
-        <p>Загрузка...</p>
+        {renderHeader()}
+        <p style={{ textAlign: 'center', fontSize: '18px', color: '#675E45' }}>Загрузка...</p>
       </div>
     );
   }
@@ -98,53 +132,15 @@ const LayerDetailPage: React.FC = () => {
   if (!layer) {
     return (
       <div className="container">
-        <header
-          className="shadow-element"
-          style={{
-            height: '160px',
-            backgroundColor: 'white',
-            padding: '20px',
-            marginBottom: '30px',
-            textAlign: 'center',
-            borderRadius: '0 0 10px 10px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <h1 style={{ fontSize: '42px', color: '#33290A', fontWeight: 'bold', margin: 0 }}>
-              Chrono Archives
-            </h1>
-          </Link>
-        </header>
-        <p>Слой не найден.</p>
+        {renderHeader()}
+        <p style={{ textAlign: 'center', fontSize: '18px', color: '#675E45' }}>Слой не найден.</p>
       </div>
     );
   }
 
   return (
     <div className="container">
-      <header
-        className="shadow-element"
-        style={{
-          height: '160px',
-          backgroundColor: 'white',
-          padding: '20px',
-          marginBottom: '30px',
-          textAlign: 'center',
-          borderRadius: '0 0 10px 10px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <h1 style={{ fontSize: '42px', color: '#33290A', fontWeight: 'bold', margin: 0 }}>
-            Chrono Archives
-          </h1>
-        </Link>
-      </header>
+      {renderHeader()}
 
       <div style={{ maxWidth: '1000px', margin: '0 auto 40px' }}>
         <div

@@ -1,4 +1,3 @@
-// src/pages/HomePage.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
@@ -39,7 +38,7 @@ const HomePage: React.FC = () => {
 
     loadInitialData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Выполняется один раз при маунте, используя сохраненный стейт
+  }, []);
 
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,26 +57,43 @@ const HomePage: React.FC = () => {
     return api.getImageUrl(rawUrl);
   };
 
+  // Общие стили для кнопок навигации
+  const navButtonStyle: React.CSSProperties = {
+    textDecoration: 'none',
+    color: '#33290A',
+    fontWeight: 'bold',
+    fontSize: '16px',
+    padding: '10px 20px',
+    borderRadius: '25px',
+    border: '2px solid #33290A',
+    transition: 'all 0.2s ease',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  };
+
   return (
     <div className="container">
+      {/* ОБНОВЛЕННАЯ ШАПКА */}
       <header
         className="shadow-element"
         style={{
-          height: '160px',
+          height: '120px', // Чуть компактнее, так как контент теперь в ширину
           backgroundColor: 'white',
-          padding: '20px',
+          padding: '0 40px', // Отступы по бокам
           marginBottom: '30px',
-          textAlign: 'center',
           borderRadius: '0 0 10px 10px',
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'space-between', // Разносим лого и кнопки по краям
           alignItems: 'center',
         }}
       >
+        {/* Логотип / Название */}
         <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
           <h1
             style={{
-              fontSize: '42px',
+              fontSize: '32px', // Чуть меньше для аккуратности
               color: '#33290A',
               fontWeight: 'bold',
               margin: 0,
@@ -86,6 +102,26 @@ const HomePage: React.FC = () => {
             Chrono Archives
           </h1>
         </Link>
+
+        <nav style={{ display: 'flex', gap: '15px' }}>
+          <Link
+            to="/landing"
+            style={{
+              ...navButtonStyle,
+              border: 'none',
+              fontSize: '18px'
+            }}
+          >
+            Главная
+          </Link>
+
+          <Link
+            to="/chrono"
+            style={navButtonStyle}
+          >
+            Летопись {cartCount > 0 && `(${cartCount})`}
+          </Link>
+        </nav>
       </header>
 
       <div className="search-container">
@@ -97,8 +133,8 @@ const HomePage: React.FC = () => {
           <input
             type="text"
             placeholder="Введите автора, период или ключевые слова"
-            value={searchQuery} // Значение из Redux
-            onChange={(e) => dispatch(setGlobalSearchQuery(e.target.value))} // Обновляем Redux
+            value={searchQuery}
+            onChange={(e) => dispatch(setGlobalSearchQuery(e.target.value))}
           />
         </form>
 

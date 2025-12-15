@@ -75,7 +75,7 @@ const App: FC = () => {
         )}
 
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/layer/:id" element={<LayerDetailPage />} />
           <Route path="/chrono" element={<HomePage />} />
