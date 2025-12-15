@@ -11,35 +11,16 @@ export default defineConfig({
     react(),
     basicSsl(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
-      manifest: {
-        name: 'Chrono Archives',
-        short_name: 'Chrono',
-        description: 'Архив исторических данных',
-        theme_color: '#ffffff',
-        background_color: '#ffffff',
-        display: 'standalone',
-        orientation: 'portrait',
-
-        scope: BASE_PATH,
-        start_url: BASE_PATH,
-
-        icons: [
-          {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable'
-          }
-        ]
-      }
+       // ... ваш PWA конфиг ...
+       registerType: 'autoUpdate',
+       // ...
+       manifest: {
+         // ...
+         name: 'Chrono Archives', // добавьте остальное из вашего файла
+         // ...
+         scope: BASE_PATH,
+         start_url: BASE_PATH,
+       }
     })
   ],
 
@@ -53,12 +34,13 @@ export default defineConfig({
 
   server: {
     port: 5173,
-    host: true,
+    host: true, // Это позволяет заходить по IP
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'http://localhost:8080', // <--- ИСПРАВЛЕНО НА 8080
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        secure: false,
+        // rewrite: (path) => path.replace(/^\/api/, ''), // <--- УДАЛЕНО (так как в Go есть /api)
       },
     },
   },
