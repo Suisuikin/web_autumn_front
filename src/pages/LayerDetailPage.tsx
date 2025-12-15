@@ -25,7 +25,6 @@ const LayerDetailPage: React.FC = () => {
     const loadLayer = async () => {
       try {
         if (!id) return;
-        // через ApiClient, чтобы работали моки
         const data = await api.getLayerById(parseInt(id, 10));
         setLayer(data as Layer);
       } catch (error) {

@@ -65,29 +65,6 @@ const LandingPage: React.FC = () => {
           }}>
             Анализируйте историческую принадлежность текстов через уникальную хронологическую базу данных
           </p>
-          <Link to="/app" style={{
-            display: 'inline-block',
-            padding: '18px 48px',
-            backgroundColor: '#B39223',
-            color: 'white',
-            fontSize: '20px',
-            fontWeight: 'bold',
-            borderRadius: '10px',
-            textDecoration: 'none',
-            boxShadow: '0 8px 20px 8px rgba(204, 200, 184, 0.5)',
-            transition: 'all 0.3s ease',
-            border: 'none',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#A08219';
-            e.currentTarget.style.transform = 'translateY(-2px)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#B39223';
-            e.currentTarget.style.transform = 'translateY(0)';
-          }}>
-            Начать анализ
-          </Link>
         </div>
       </section>
 
@@ -379,7 +356,7 @@ const LandingPage: React.FC = () => {
         }}>
           Присоединитесь к исследователям, которые используют Chrono Archives для анализа исторических текстов
         </p>
-        <Link to="/app" style={{
+        <Link to="/chrono" style={{
           display: 'inline-block',
           padding: '18px 48px',
           backgroundColor: '#B39223',

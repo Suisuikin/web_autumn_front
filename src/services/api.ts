@@ -122,7 +122,6 @@ class ApiClient {
     localStorage.removeItem('authtoken');
   }
 
-  // Layers endpoints
   async getLayers(query?: string): Promise<Layer[]> {
     if (USE_MOCK) return MockApiClient.getLayers(query);
     const params = new URLSearchParams();

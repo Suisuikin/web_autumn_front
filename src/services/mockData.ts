@@ -14,8 +14,7 @@ export const MOCK_LAYERS: RandomLayer[] = [
     "id": 1,
     "name": "Средневековый слой (XI-XV вв.) - обновлённый",
     "description": "Расширенная лексика древнерусского периода",
-    "image_url": "http://127.0.0.1:9000/chrono/1_1761001602469308798.jpg",
-    "from_year": 1000,
+   "from_year": 1000,
     "to_year": 1500,
     "words": "дружина,князь,воевода,гридь,тиун,вече,боярин,отрок,кормилец,тысяцкий",
     "status": "active"
@@ -24,7 +23,6 @@ export const MOCK_LAYERS: RandomLayer[] = [
     "id": 2,
     "name": "Древнерусский слой",
     "description": "Церковнославянская и летописная лексика: «вещати», «чудо», «чадо», «рать». Без заимствований.",
-    "image_url": "http://127.0.0.1:9000/chrono/1_1761001602469308798.jpg",
     "from_year": 1000,
     "to_year": 1450,
     "words": "вещати,чудо,чадо,рать,вече,князь,боярин,дружина",
@@ -34,7 +32,6 @@ export const MOCK_LAYERS: RandomLayer[] = [
     "id": 3,
     "name": "Раннесреднерусский слой",
     "description": "Смешение церковнославянской и народной речи. Первые полонизмы и кальки с латинизмов.",
-    "image_url": "http://localhost:9000/chrono/img_1.png",
     "from_year": 1450,
     "to_year": 1600,
     "words": "полонизм,калька,светлица,хоромы,терем,посад",
@@ -44,7 +41,6 @@ export const MOCK_LAYERS: RandomLayer[] = [
     "id": 4,
     "name": "Позднесреднерусский слой",
     "description": "Расширение бытовой лексики, редкие заимствования из Европы. Переходный период перед реформами Петра.",
-    "image_url": "http://localhost:9000/chrono/img_2.png",
     "from_year": 1600,
     "to_year": 1720,
     "words": "изба,амбар,лавка,торг,приказ,дьяк,подьячий",
@@ -54,7 +50,6 @@ export const MOCK_LAYERS: RandomLayer[] = [
     "id": 5,
     "name": "Петровский слой",
     "description": "Активное заимствование из западных языков, формирование современного литературного языка.",
-    "image_url": "http://localhost:9000/chrono/img_3.png",
     "from_year": 1720,
     "to_year": 1800,
     "words": "регламент,ассамблея,губерния,коллегия,сенат,генерал,адмирал,гардероб",
@@ -64,7 +59,6 @@ export const MOCK_LAYERS: RandomLayer[] = [
     "id": 6,
     "name": "Классический слой",
     "description": "Эпоха Пушкина и Толстого. Развитие науки, формирование норм, частичная архаизация старых слов.",
-    "image_url": "http://localhost:9000/chrono/img_4.png",
     "from_year": 1800,
     "to_year": 1917,
     "words": "литература,поэзия,гимназия,университет,департамент,чиновник,дворянин,извозчик",
@@ -74,7 +68,6 @@ export const MOCK_LAYERS: RandomLayer[] = [
     "id": 7,
     "name": "Революционно-советский слой",
     "description": "Массовые неологизмы и идеологическая лексика: «колхоз», «пятилетка», «социализм».",
-    "image_url": "http://localhost:9000/chrono/img_5.png",
     "from_year": 1917,
     "to_year": 1950,
     "words": "колхоз,пятилетка,социализм,коммунизм,партком,совет,революция,товарищ",
@@ -84,7 +77,6 @@ export const MOCK_LAYERS: RandomLayer[] = [
     "id": 8,
     "name": "Позднесоветский слой",
     "description": "Техническая и бюрократическая речь: «автоматизация», «НИИ», «профком», «космодром».",
-    "image_url": "http://127.0.0.1:9000/chrono/8_1759844949964897641.jpg",
     "from_year": 1950,
     "to_year": 1985,
     "words": "автоматизация,НИИ,профком,космодром,спутник,комсомол,пионер,ракета",
@@ -94,7 +86,6 @@ export const MOCK_LAYERS: RandomLayer[] = [
     "id": 11,
     "name": "Древний слой",
     "description": "Слой с археологическими находками",
-    "image_url": "image",
     "from_year": 1000,
     "to_year": 1500,
     "words": "археология,курган,городище,палеография,берестяная,грамота",
@@ -102,7 +93,6 @@ export const MOCK_LAYERS: RandomLayer[] = [
   }
 ];
 
-// Mock-данные для заявок
 export const MOCK_REQUESTS = [
   {
     id: 1,
@@ -114,7 +104,6 @@ export const MOCK_REQUESTS = [
   }
 ];
 
-// Helper для выбора N случайных элементов
 export function pickRandom<T>(arr: T[], count: number): T[] {
   if (!arr || arr.length <= count) return (arr || []).slice(0, count);
   const idxs = new Set<number>();

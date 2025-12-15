@@ -1,47 +1,33 @@
-import React from 'react';
-import { Card, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { Service } from '../types';
-import { getImageUrl } from '../services/api';
-import '../styles/ServiceCard.css';
+import React, { FC } from 'react';
+import { Service } from '../store/types/service.types';
 
 interface ServiceCardProps {
   service: Service;
+  onSelect?: (id: number) => void;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
+const ServiceCard: FC<ServiceCardProps> = ({ service, onSelect }) => {
+  const handleClick = (): void => {
+    if (onSelect) {
+      onSelect(service.id);
+    }
+  };
+
   return (
-    <Card className="service-card h-100 shadow-sm">
-      <Card.Img
-        variant="top"
-        src={getImageUrl(service.image_url)}
+    <div className="service-card" onClick={handleClick}>
+      <img
+        src={service.image || 'https://via.placeholder.com/400x300?text=No+Image'}
         alt={service.name}
-        className="service-card-image"
       />
-      <Card.Body className="d-flex flex-column">
-        <Card.Title>{service.name}</Card.Title>
-        <Card.Text className="text-muted flex-grow-1">
-          {service.description.length > 100
-            ? `${service.description.substring(0, 100)}...`
-            : service.description}
-        </Card.Text>
-        <div className="mt-auto">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <span className="h5 mb-0 text-primary">
-              {service.price.toLocaleString('ru-RU')} ₽
-            </span>
-          </div>
-          <Button
-            as={Link}
-            to={`/services/${service.id}`}
-            variant="primary"
-            className="w-100"
-          >
-            Подробнее
-          </Button>
-        </div>
-      </Card.Body>
-    </Card>
+      <div className="service-card-content">
+        <h3 className="service-card-title">{service.name}</h3>
+        <p className="service-card-price">
+          {service.price.toLocaleString('ru-RU')} ₽
+        </p>
+        <p className="service-card-description">{service.description}</p>
+        <button className="service-card-button">Подробнее</button>
+      </div>
+    </div>
   );
 };
 

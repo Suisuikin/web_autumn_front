@@ -95,14 +95,14 @@ const HomePage: React.FC = () => {
         </form>
 
         <div className="search-button shadow-element">
-          {/* Кнопка снаружи формы, но связана с ней через form="search-form" */}
+          {/*  */}
           <button type="submit" form="search-form">
             Найти
           </button>
         </div>
 
         <div className="cart-button shadow-element">
-          <Link to="/app" style={{ position: 'relative' }}>
+          <Link to="/chrono" style={{ position: 'relative' }}>
             <span className="cart-icon">🛒</span>
           </Link>
         </div>

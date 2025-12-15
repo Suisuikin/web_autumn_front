@@ -4,7 +4,6 @@ import { MOCK_LAYERS, MOCK_REQUESTS, MockLayer } from './mockLayers';
 
 const delay = (ms: number = 300) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Хелпер для выбора случайных элементов
 function pickRandom<T>(arr: T[], count: number): T[] {
   if (!arr || arr.length <= count) return arr.slice(0, count);
   const shuffled = [...arr].sort(() => Math.random() - 0.5);
@@ -12,7 +11,6 @@ function pickRandom<T>(arr: T[], count: number): T[] {
 }
 
 export class MockApiClient {
-  // Layers endpoints
   async getLayers(query?: string): Promise<MockLayer[]> {
     await delay();
     if (query) {
@@ -59,7 +57,6 @@ export class MockApiClient {
     if (status) {
       filtered = filtered.filter(req => req.status === status);
     }
-    // dateFrom/dateTo можно при необходимости добавить
     return filtered;
   }
 
@@ -68,7 +65,6 @@ export class MockApiClient {
     const request = MOCK_REQUESTS.find(req => req.id === id);
     if (!request) return null;
 
-    // Добавляем случайные слои к заявке
     const randomLayers = pickRandom(MOCK_LAYERS, 3);
     return {
       ...request,
@@ -103,7 +99,6 @@ export class MockApiClient {
     return { success: true };
   }
 
-  // Chrono order endpoints
   async getChronoById(id: number): Promise<any | null> {
     await delay();
     const twoRandomLayers = pickRandom(MOCK_LAYERS, 2);
@@ -131,7 +126,6 @@ export class MockApiClient {
     return { success: true };
   }
 
-  // Auth endpoints (заглушки)
   async register(username: string, password: string, email?: string): Promise<any> {
     await delay();
     console.log('[MOCK] Регистрация:', { username, email });
@@ -149,7 +143,6 @@ export class MockApiClient {
     console.log('[MOCK] Выход');
   }
 
-  // Helper
   getImageUrl(imageUrl?: string): string {
     if (!imageUrl || imageUrl === 'image') return '/placeholder.jpg';
     return imageUrl.startsWith('http') ? imageUrl : `http://localhost:8080${imageUrl}`;
