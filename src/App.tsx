@@ -45,7 +45,7 @@ const App: FC = () => {
 
   return (
     <Provider store={store}>
-      <Router basename={import.meta.env.BASE_URL}>
+        <Router basename={import.meta.env.PROD ? '/web_autumn_front/' : '/'}>
 
         {showInstallBtn && (
           <button

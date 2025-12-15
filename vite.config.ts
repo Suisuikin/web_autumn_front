@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import basicSsl from '@vitejs/plugin-basic-ssl'
 import path from 'path';
 
 const BASE_PATH = process.env.GITHUB_PAGES ? '/web_autumn_front/' : '/';
@@ -8,6 +9,7 @@ const BASE_PATH = process.env.GITHUB_PAGES ? '/web_autumn_front/' : '/';
 export default defineConfig({
   plugins: [
     react(),
+    basicSsl(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],

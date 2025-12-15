@@ -1,8 +1,15 @@
 import MockApiClient from './mockApi';
 
-const USE_MOCK = true;
+declare global {
+  interface Window {
+    __TAURI__?: any;
+  }
+}
 
-const API_BASE = 'http://localhost:8080/api';
+const IS_TAURI = import.meta.env.VITE_IS_TAURI === 'true';
+const USE_MOCK = !IS_TAURI;
+
+const API_BASE = 'http://172.20.10.3:8080/api';
 
 interface Layer {
   id: number;
