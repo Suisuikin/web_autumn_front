@@ -202,23 +202,29 @@ class ApiClient {
 
   getImageUrl(imageUrl?: string) {
     const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
-    if (!imageUrl) return `${BASE}/images/placeholder.jpg`;
-    if (imageUrl.startsWith('http')) return imageUrl;
 
-    // Тут сложнее: если мы в режиме моков (fallback), то картинки тоже должны быть моковые (локальные)
-    if (this.useMockFallback) {
-         // Предполагаем, что моковые картинки лежат в public
-         // Если путь /images/layer1.jpg -> то возвращаем как есть
-         return imageUrl.startsWith('/') ? `${BASE}${imageUrl}` : `${BASE}/${imageUrl}`;
+    if (!imageUrl) {
+        const placeholder = '/images/img.png';
+        return `${BASE}${placeholder}`;
     }
 
-    // Иначе пробуем реальный адрес
-    // Для GitHub Pages ставим тот же хардкодный IP
+    if (imageUrl.startsWith('http')) return imageUrl;
+    if (BASE && imageUrl.startsWith(BASE)) {
+        return imageUrl;
+    }
+
+    if (this.useMockFallback) {
+        const cleanPath = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
+        return `${BASE}${cleanPath}`;
+    }
+
     let imageHost = 'http://localhost:8080';
     if (IS_TAURI || IS_GITHUB) imageHost = 'http://172.20.10.3:8080';
 
-    return `${imageHost}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+    const cleanPath = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
+    return `${imageHost}${cleanPath}`;
   }
+
 }
 
 const apiClient = new ApiClient();
