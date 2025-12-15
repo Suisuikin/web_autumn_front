@@ -13,16 +13,12 @@ import './styles/styles.css';
 const App: FC = () => {
   useEffect(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/service-worker.ts')
-        .then(() => console.log('Service Worker зарегистрирован'))
-        .catch((err) => console.log('Ошибка SW:', err));
     }
   }, []);
 
   return (
     <Provider store={store}>
-      <Router>
+      <Router basename={import.meta.env.BASE_URL}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/landing" element={<LandingPage />} />
@@ -34,7 +30,7 @@ const App: FC = () => {
             element={
               <div style={{ padding: '40px', textAlign: 'center' }}>
                 <h1>404 - Страница не найдена</h1>
-                <a href="/">← Вернуться на главную</a>
+                <a href={import.meta.env.BASE_URL}>← Вернуться на главную</a>
               </div>
             }
           />
