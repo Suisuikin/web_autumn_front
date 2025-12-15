@@ -10,4 +10,5 @@ export interface ServiceFilter {
 export interface ServiceFilterState {
   filters: ServiceFilter;
   lastAppliedFilters: ServiceFilter;
+  globalSearchQuery: string;
 }

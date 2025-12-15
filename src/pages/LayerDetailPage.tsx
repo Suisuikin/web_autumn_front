@@ -1,6 +1,6 @@
 // src/pages/LayerDetailPage.tsx
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
 
 interface Layer {
@@ -21,11 +21,6 @@ const LayerDetailPage: React.FC = () => {
   const [layer, setLayer] = useState<Layer | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Единая логика пути домой
-  const homePath = window.location.hostname.includes('github.io')
-    ? '/web_autumn_front/'
-    : '/';
-
   useEffect(() => {
     const loadLayer = async () => {
       try {
@@ -42,36 +37,21 @@ const LayerDetailPage: React.FC = () => {
     loadLayer();
   }, [id]);
 
-  const handleAddToRequest = async () => {
-    try {
-      if (!id) return;
-      await api.addLayerToRequest(parseInt(id, 10));
-      alert('Слой добавлен в заявку');
-      window.location.href = '/order';
-    } catch (error) {
-      console.error('Error adding to request:', error);
-      alert('Не удалось добавить слой в заявку');
-    }
-  };
-
-  const wordsList =
-    layer?.words?.split(',').map((w) => w.trim()).filter((w) => w.length > 0) ?? [];
+  const wordsList = layer?.words?.split(',').map((w) => w.trim()).filter((w) => w.length > 0) ?? [];
 
   const getYears = () => {
-    const from = layer?.from_year ?? layer?.fromyear ?? undefined;
-    const to = layer?.to_year ?? layer?.toyear ?? undefined;
-
-    if (from && to) return `${from} – ${to}`;
-    if (from) return `c ${from}`;
-    if (to) return `до ${to}`;
-    return '';
+      const from = layer?.from_year ?? layer?.fromyear ?? undefined;
+      const to = layer?.to_year ?? layer?.toyear ?? undefined;
+      if (from && to) return `${from} – ${to}`;
+      if (from) return `c ${from}`;
+      if (to) return `до ${to}`;
+      return '';
   };
 
   const renderImage = () => {
     const rawUrl = layer?.image_url || layer?.imageurl;
     if (!rawUrl) return null;
     const src = api.getImageUrl(rawUrl);
-
     return (
       <img
         src={src}
@@ -104,11 +84,11 @@ const LayerDetailPage: React.FC = () => {
             alignItems: 'center',
           }}
         >
-          <a href={homePath} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <h1 style={{ fontSize: '42px', color: '#33290A', fontWeight: 'bold', margin: 0 }}>
               Chrono Archives
             </h1>
-          </a>
+          </Link>
         </header>
         <p>Загрузка...</p>
       </div>
@@ -132,11 +112,11 @@ const LayerDetailPage: React.FC = () => {
             alignItems: 'center',
           }}
         >
-          <a href={homePath} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <h1 style={{ fontSize: '42px', color: '#33290A', fontWeight: 'bold', margin: 0 }}>
               Chrono Archives
             </h1>
-          </a>
+          </Link>
         </header>
         <p>Слой не найден.</p>
       </div>
@@ -159,11 +139,11 @@ const LayerDetailPage: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        <a href={homePath} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
           <h1 style={{ fontSize: '42px', color: '#33290A', fontWeight: 'bold', margin: 0 }}>
             Chrono Archives
           </h1>
-        </a>
+        </Link>
       </header>
 
       <div style={{ maxWidth: '1000px', margin: '0 auto 40px' }}>

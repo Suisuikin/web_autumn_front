@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+// Redux
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { setGlobalSearchQuery } from '../store/serviceFilterSlice';
 
 interface Layer {
   id: number;
@@ -13,17 +16,18 @@ interface Layer {
 
 const HomePage: React.FC = () => {
   const [layers, setLayers] = useState<Layer[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  // Локальный стейт поиска удален, теперь берем из Redux
   const [cartCount, setCartCount] = useState(0);
 
-  const homePath = window.location.hostname.includes('github.io')
-    ? '/web_autumn_front/'
-    : '/';
+  const dispatch = useAppDispatch();
+  const searchQuery = useAppSelector((state) => state.serviceFilter.globalSearchQuery);
 
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        const data = await api.getLayers();
+        // Используем значение из Redux для начальной загрузки
+        const query = searchQuery.trim();
+        const data = await api.getLayers(query || undefined);
         setLayers(Array.isArray(data) ? data : []);
 
         const cart = await api.getCartIcon();
@@ -34,7 +38,8 @@ const HomePage: React.FC = () => {
     };
 
     loadInitialData();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Выполняется один раз при маунте, используя сохраненный стейт
 
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,8 +74,7 @@ const HomePage: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        {/* ССЫЛКА ТЕПЕРЬ РАБОТАЕТ ВЕЗДЕ */}
-        <a href={homePath} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
           <h1
             style={{
               fontSize: '42px',
@@ -81,7 +85,7 @@ const HomePage: React.FC = () => {
           >
             Chrono Archives
           </h1>
-        </a>
+        </Link>
       </header>
 
       <div className="search-container">
@@ -93,8 +97,8 @@ const HomePage: React.FC = () => {
           <input
             type="text"
             placeholder="Введите автора, период или ключевые слова"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchQuery} // Значение из Redux
+            onChange={(e) => dispatch(setGlobalSearchQuery(e.target.value))} // Обновляем Redux
           />
         </form>
 
