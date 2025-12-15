@@ -1,5 +1,6 @@
+// src/App.tsx
 import { FC, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 
@@ -43,9 +44,12 @@ const App: FC = () => {
     setShowInstallBtn(false);
   };
 
+  const isGitHubPages = window.location.hostname.includes('github.io');
+  const basename = isGitHubPages ? '/web_autumn_front/' : '/';
+
   return (
     <Provider store={store}>
-        <Router basename={import.meta.env.PROD ? '/web_autumn_front/' : '/'}>
+      <Router basename={basename}>
 
         {showInstallBtn && (
           <button
@@ -81,12 +85,12 @@ const App: FC = () => {
             element={
               <div style={{ padding: '40px', textAlign: 'center' }}>
                 <h1>404 - Страница не найдена</h1>
-                <a
-                  href={import.meta.env.BASE_URL}
+                <Link
+                  to="/"
                   style={{ color: '#B39223', textDecoration: 'none', fontWeight: 'bold' }}
                 >
                   ← Вернуться на главную
-                </a>
+                </Link>
               </div>
             }
           />

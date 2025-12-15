@@ -16,10 +16,15 @@ interface Layer {
   toyear?: number;
 }
 
+const isTauri = import.meta.env.VITE_IS_TAURI === 'true';
+const homePath = (import.meta.env.PROD && !isTauri) ? '/web_autumn_front/' : '/';
+
 const LayerDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [layer, setLayer] = useState<Layer | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const homePath = import.meta.env.PROD ? '/web_autumn_front/' : '/';
 
   useEffect(() => {
     const loadLayer = async () => {
@@ -53,14 +58,8 @@ const LayerDetailPage: React.FC = () => {
     layer?.words?.split(',').map((w) => w.trim()).filter((w) => w.length > 0) ?? [];
 
   const getYears = () => {
-    const from =
-      layer?.from_year ??
-      layer?.fromyear ??
-      undefined;
-    const to =
-      layer?.to_year ??
-      layer?.toyear ??
-      undefined;
+    const from = layer?.from_year ?? layer?.fromyear ?? undefined;
+    const to = layer?.to_year ?? layer?.toyear ?? undefined;
 
     if (from && to) return `${from} – ${to}`;
     if (from) return `c ${from}`;
@@ -105,7 +104,7 @@ const LayerDetailPage: React.FC = () => {
             alignItems: 'center',
           }}
         >
-          <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <a href={homePath} style={{ textDecoration: 'none', color: 'inherit' }}>
             <h1 style={{ fontSize: '42px', color: '#33290A', fontWeight: 'bold', margin: 0 }}>
               Chrono Archives
             </h1>
@@ -133,7 +132,7 @@ const LayerDetailPage: React.FC = () => {
             alignItems: 'center',
           }}
         >
-          <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <a href={homePath} style={{ textDecoration: 'none', color: 'inherit' }}>
             <h1 style={{ fontSize: '42px', color: '#33290A', fontWeight: 'bold', margin: 0 }}>
               Chrono Archives
             </h1>
@@ -160,7 +159,7 @@ const LayerDetailPage: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <a href={homePath} style={{ textDecoration: 'none', color: 'inherit' }}>
           <h1 style={{ fontSize: '42px', color: '#33290A', fontWeight: 'bold', margin: 0 }}>
             Chrono Archives
           </h1>
@@ -268,15 +267,6 @@ const LayerDetailPage: React.FC = () => {
             </div>
           </div>
         )}
-
-        <div
-          style={{
-            display: 'flex',
-            gap: '16px',
-            marginBottom: '40px',
-          }}
-        >
-        </div>
       </div>
     </div>
   );

@@ -11,10 +11,16 @@ interface Layer {
   imageurl?: string;
 }
 
+const isTauri = import.meta.env.VITE_IS_TAURI === 'true';
+const homePath = (import.meta.env.PROD && !isTauri) ? '/web_autumn_front/' : '/';
+
 const HomePage: React.FC = () => {
   const [layers, setLayers] = useState<Layer[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [cartCount, setCartCount] = useState(0);
+
+  // Вычисляем правильный путь "Домой"
+  const homePath = import.meta.env.PROD ? '/web_autumn_front/' : '/';
 
   useEffect(() => {
     const loadInitialData = async () => {
@@ -65,7 +71,8 @@ const HomePage: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+        {/* ИСПРАВЛЕННАЯ ССЫЛКА */}
+        <a href={homePath} style={{ textDecoration: 'none', color: 'inherit' }}>
           <h1
             style={{
               fontSize: '42px',
@@ -80,7 +87,6 @@ const HomePage: React.FC = () => {
       </header>
 
       <div className="search-container">
-        {/* Форма поиска: id нужен, чтобы связать с кнопкой снаружи */}
         <form
           id="search-form"
           className="search-bar shadow-element"
@@ -95,7 +101,6 @@ const HomePage: React.FC = () => {
         </form>
 
         <div className="search-button shadow-element">
-          {/*  */}
           <button type="submit" form="search-form">
             Найти
           </button>
