@@ -1,23 +1,15 @@
 // src/pages/LandingPage.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import api from '../services/api';
 
 const LandingPage: React.FC = () => {
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Стили для кнопок навигации
   const navButtonStyle: React.CSSProperties = {
     textDecoration: 'none',
     color: '#33290A',
     fontWeight: 'bold',
     fontSize: '16px',
-    padding: '10px 20px',
+    padding: '8px 16px',
     borderRadius: '25px',
     border: '2px solid #33290A',
     transition: 'all 0.2s ease',
@@ -26,25 +18,24 @@ const LandingPage: React.FC = () => {
     justifyContent: 'center',
     backgroundColor: 'transparent',
     cursor: 'pointer',
+    whiteSpace: 'nowrap',
   };
 
   return (
-    <div style={{ backgroundColor: '#F0EDE3', minHeight: '100vh', fontFamily: 'sans-serif' }}>
+    <div className="landing-container" style={{ backgroundColor: '#F0EDE3', minHeight: '100vh', fontFamily: 'sans-serif' }}>
+
       {/* HEADER */}
-      <header className="shadow-element" style={{
-        height: '120px',
+      <header className="shadow-element header-responsive" style={{
         backgroundColor: 'white',
-        padding: '0 40px',
-        marginBottom: '0',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         position: 'relative',
         zIndex: 10,
+        boxSizing: 'border-box',
       }}>
         <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <h1 style={{
-            fontSize: '32px',
+          <h1 className="logo-text" style={{
             color: '#33290A',
             fontWeight: 'bold',
             margin: 0,
@@ -53,30 +44,18 @@ const LandingPage: React.FC = () => {
           </h1>
         </Link>
 
-        <nav style={{ display: 'flex', gap: '15px' }}>
-          <Link
-            to="/"
-            style={{
-              ...navButtonStyle,
-              border: 'none',
-              fontSize: '18px'
-            }}
-          >
+        <nav style={{ display: 'flex', gap: '10px' }}>
+          <Link to="/" style={{ ...navButtonStyle, border: 'none' }}>
             Главная
           </Link>
-          <Link
-            to="/chrono"
-            style={navButtonStyle}
-          >
+          <Link to="/chrono" style={navButtonStyle}>
             Летопись
           </Link>
         </nav>
       </header>
 
-      {/* HERO SECTION */}
-      <section style={{
+      <section className="hero-section" style={{
         textAlign: 'center',
-        padding: '60px 20px 40px',
         backgroundColor: '#F0EDE3',
       }}>
         <div style={{
@@ -84,8 +63,7 @@ const LandingPage: React.FC = () => {
           margin: '0 auto',
           animation: `fadeIn 0.6s ease-in`,
         }}>
-          <h2 style={{
-            fontSize: '56px',
+          <h2 className="hero-title" style={{
             fontWeight: '800',
             color: '#33290A',
             marginBottom: '20px',
@@ -93,10 +71,9 @@ const LandingPage: React.FC = () => {
           }}>
             Исторический архив текстов
           </h2>
-          <p style={{
-            fontSize: '24px',
+          <p className="hero-subtitle" style={{
             color: '#675E45',
-            marginBottom: '40px',
+            marginBottom: '30px',
             lineHeight: 1.6,
             fontWeight: '500',
           }}>
@@ -105,169 +82,106 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* WELCOME / HOW TO USE SECTION (БЕЗ СТРЕЛОК) */}
-      <section style={{
+      <section className="welcome-section" style={{
         maxWidth: '1000px',
-        margin: '0 auto 60px',
-        padding: '0 20px',
+        margin: '0 auto',
       }}>
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-            <h3 style={{ fontSize: '32px', fontWeight: 'bold', color: '#33290A', marginBottom: '10px' }}>
+            <h3 className="section-title" style={{ fontWeight: 'bold', color: '#33290A', marginBottom: '10px' }}>
               Добро пожаловать!
             </h3>
         </div>
 
-        <div className="shadow-element" style={{
+        <div className="shadow-element welcome-card" style={{
             backgroundColor: 'white',
             borderRadius: '20px',
-            padding: '40px 60px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 8px 20px 8px rgba(204, 200, 184, 0.3)', // Сделал тень мягче
+            boxShadow: '0 8px 20px 8px rgba(204, 200, 184, 0.3)',
         }}>
             <div style={{ width: '100%', textAlign: 'center' }}>
                 <h4 style={{
-                    fontSize: '24px',
+                    fontSize: '22px',
                     fontWeight: 'bold',
-                    marginBottom: '30px',
+                    marginBottom: '20px',
                     color: '#33290A'
                 }}>
                     Как использовать
                 </h4>
 
-                <div style={{
+                <div className="steps-list" style={{
                     textAlign: 'left',
                     display: 'inline-block',
-                    fontSize: '18px',
                     color: '#333',
-                    lineHeight: '2.2'
+                    lineHeight: '2.0'
                 }}>
                     <div>1. Перейдите в раздел <Link to="/chrono" style={{color: '#B39223', fontWeight: 'bold', textDecoration: 'none'}}>"Летопись"</Link></div>
-                    <div>2. Выберите интересующий Вас исторический период</div>
-                    <div>3. Изучите детальную информацию и документы</div>
-                    <div>4. Создайте заявку на хронологический анализ текста</div>
+                    <div>2. Выберите интересующий Вас период</div>
+                    <div>3. Изучите детальную информацию</div>
+                    <div>4. Создайте заявку на анализ текста</div>
                 </div>
             </div>
         </div>
       </section>
 
-      {/* FEATURES */}
-      <section style={{
-        backgroundColor: 'white',
-        padding: '80px 40px',
-        margin: '40px auto 80px', // Увеличил отступ снизу перед футером
-        borderRadius: '10px',
+      <section className="eras-section" style={{
         maxWidth: '1200px',
-        boxShadow: '0 8px 20px 8px rgba(204, 200, 184, 0.5)',
+        margin: '60px auto 80px',
       }}>
-        <h3 style={{
-          fontSize: '42px',
+        <h3 className="section-title" style={{
           fontWeight: '800',
           color: '#33290A',
           textAlign: 'center',
-          marginBottom: '60px',
+          marginBottom: '40px',
         }}>
-          Возможности системы
+          Ключевые Эпохи
         </h3>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '40px',
-        }}>
-          {/* FEATURE 1 */}
-          <div style={{
-            padding: '30px',
-            backgroundColor: '#F0EDE3',
-            borderRadius: '10px',
-            textAlign: 'center',
-          }}>
-            <div style={{ fontSize: '48px', marginBottom: '20px' }}>📚</div>
-            <h4 style={{
-              fontSize: '24px',
-              fontWeight: '800',
-              color: '#33290A',
-              marginBottom: '15px',
-            }}>
-              Большая база
-            </h4>
-            <p style={{
-              fontSize: '16px',
-              color: '#675E45',
-              lineHeight: 1.6,
-            }}>
-              Доступ к тысячам исторических текстов, отсортированных по хронологическим периодам
+        <div className="eras-grid">
+          <div className="era-card shadow-element">
+            <div className="era-icon">🏛️</div>
+            <h4 className="era-title">Античность</h4>
+            <div className="era-years">VIII в. до н.э. — V в. н.э.</div>
+            <p className="era-desc">
+              Философские трактаты, поэмы Гомера и римское право. Основы западной цивилизации.
             </p>
           </div>
 
-          {/* FEATURE 2 */}
-          <div style={{
-            padding: '30px',
-            backgroundColor: '#F0EDE3',
-            borderRadius: '10px',
-            textAlign: 'center',
-          }}>
-            <div style={{ fontSize: '48px', marginBottom: '20px' }}>🔍</div>
-            <h4 style={{
-              fontSize: '24px',
-              fontWeight: '800',
-              color: '#33290A',
-              marginBottom: '15px',
-            }}>
-              Анализ текстов
-            </h4>
-            <p style={{
-              fontSize: '16px',
-              color: '#675E45',
-              lineHeight: 1.6,
-            }}>
-              Быстрый и точный анализ текста для определения исторической принадлежности
+          <div className="era-card shadow-element">
+            <div className="era-icon">🏰</div>
+            <h4 className="era-title">Средневековье</h4>
+            <div className="era-years">V — XV вв.</div>
+            <p className="era-desc">
+              Рыцарские романы, церковные летописи и становление европейских государств.
             </p>
           </div>
 
-          {/* FEATURE 3 */}
-          <div style={{
-            padding: '30px',
-            backgroundColor: '#F0EDE3',
-            borderRadius: '10px',
-            textAlign: 'center',
-          }}>
-            <div style={{ fontSize: '48px', marginBottom: '20px' }}>📊</div>
-            <h4 style={{
-              fontSize: '24px',
-              fontWeight: '800',
-              color: '#33290A',
-              marginBottom: '15px',
-            }}>
-              Отчеты
-            </h4>
-            <p style={{
-              fontSize: '16px',
-              color: '#675E45',
-              lineHeight: 1.6,
-            }}>
-              Подробные отчеты с визуализацией результатов анализа
+          <div className="era-card shadow-element">
+            <div className="era-icon">⚙️</div>
+            <h4 className="era-title">Новое время</h4>
+            <div className="era-years">XVII — XIX вв.</div>
+            <p className="era-desc">
+              Эпоха просвещения, промышленные революции и расцвет классической литературы.
             </p>
           </div>
         </div>
       </section>
 
-      {/* FOOTER (ОБНОВЛЕННЫЙ) */}
       <footer style={{
         backgroundColor: '#33290A',
         color: '#F0EDE3',
         textAlign: 'center',
-        padding: '50px 20px',
+        padding: '40px 20px',
         fontSize: '16px',
-        borderTop: '4px solid #B39223', // Добавил золотую линию сверху для стиля
+        borderTop: '4px solid #B39223',
       }}>
-        <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '24px', opacity: 0.9 }}>
+        <div style={{ marginBottom: '15px', fontWeight: 'bold', fontSize: '22px', opacity: 0.9 }}>
           Chrono Archives
         </div>
-        <p>© 2025 Все права защищены.</p>
-        <p style={{ marginTop: '10px', fontSize: '14px', opacity: 0.6, maxWidth: '600px', margin: '10px auto 0' }}>
-          Проект разработан для анализа исторических текстов с использованием современных алгоритмов обработки естественного языка и обширной хронологической базы данных.
+        <p style={{ margin: 0 }}>© 2025 Все права защищены.</p>
+        <p style={{ marginTop: '10px', fontSize: '13px', opacity: 0.6, maxWidth: '500px', margin: '10px auto 0' }}>
+          Проект разработан для анализа исторических текстов с использованием современных алгоритмов.
         </p>
       </footer>
 
@@ -275,6 +189,62 @@ const LandingPage: React.FC = () => {
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Desktop Defaults --- */
+        .header-responsive { height: 120px; padding: 0 40px; margin-bottom: 0; }
+        .logo-text { font-size: 32px; }
+        .hero-section { padding: 60px 20px 40px; }
+        .hero-title { font-size: 56px; }
+        .hero-subtitle { font-size: 24px; }
+        .welcome-section { padding: 0 20px 60px; }
+        .welcome-card { padding: 40px 60px; }
+        .steps-list { font-size: 18px; }
+        .section-title { font-size: 42px; }
+
+        .eras-section { padding: 0 40px; }
+        .eras-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 30px;
+        }
+
+        .era-card {
+          background-color: white;
+          border-radius: 15px;
+          padding: 30px;
+          text-align: center;
+          transition: transform 0.3s ease;
+        }
+        .era-card:hover { transform: translateY(-5px); }
+        .era-icon { font-size: 48px; margin-bottom: 15px; }
+        .era-title { font-size: 22px; font-weight: bold; color: #33290A; margin-bottom: 5px; }
+        .era-years { color: #B39223; font-weight: 600; margin-bottom: 15px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .era-desc { font-size: 15px; color: #675E45; line-height: 1.5; }
+
+        /* --- Mobile Adaptivity --- */
+        @media (max-width: 768px) {
+          .header-responsive {
+            height: auto;
+            padding: 20px;
+            flex-direction: column;
+            gap: 15px;
+          }
+          .logo-text { font-size: 28px; }
+
+          .hero-section { padding: 40px 20px; }
+          .hero-title { font-size: 32px; } /* Уменьшаем заголовок */
+          .hero-subtitle { font-size: 18px; margin-bottom: 20px; }
+
+          .welcome-card { padding: 30px 20px; } /* Меньше паддинг */
+          .steps-list { font-size: 16px; text-align: left; width: 100%; }
+          .section-title { font-size: 28px; }
+
+          .eras-section { margin: 40px auto; padding: 0 20px; }
+          .eras-grid {
+            grid-template-columns: 1fr; /* Одна колонка */
+            gap: 20px;
+          }
         }
       `}</style>
     </div>
