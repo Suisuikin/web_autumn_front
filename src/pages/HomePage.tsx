@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
-// Redux
-import { useAppDispatch, useAppSelector } from '../store/store';
-import { setGlobalSearchQuery } from '../store/serviceFilterSlice';
 
 interface Layer {
   id: number;
@@ -11,53 +8,35 @@ interface Layer {
   description?: string;
   image_url?: string;
   imageurl?: string;
+  words?: string;
+  from_year?: number;
+  to_year?: number;
+  fromyear?: number;
+  toyear?: number;
 }
 
-const HomePage: React.FC = () => {
-  const [layers, setLayers] = useState<Layer[]>([]);
-  // Локальный стейт поиска удален, теперь берем из Redux
-  const [cartCount, setCartCount] = useState(0);
-
-  const dispatch = useAppDispatch();
-  const searchQuery = useAppSelector((state) => state.serviceFilter.globalSearchQuery);
+const LayerDetailPage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const [layer, setLayer] = useState<Layer | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadInitialData = async () => {
+    const loadLayer = async () => {
       try {
-        // Используем значение из Redux для начальной загрузки
-        const query = searchQuery.trim();
-        const data = await api.getLayers(query || undefined);
-        setLayers(Array.isArray(data) ? data : []);
-
-        const cart = await api.getCartIcon();
-        setCartCount(cart.count ?? 0);
+        if (!id) return;
+        const data = await api.getLayerById(parseInt(id, 10));
+        setLayer(data as Layer);
       } catch (error) {
-        console.error('Error loading data:', error);
+        console.error('Error loading layer:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    loadInitialData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    loadLayer();
+  }, [id]);
 
-  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const query = searchQuery.trim();
-      const data = await api.getLayers(query || undefined);
-      setLayers(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error('Error searching layers:', error);
-    }
-  };
-
-  const getImageSrc = (layer: Layer) => {
-    const rawUrl = layer.image_url || layer.imageurl;
-    if (!rawUrl) return undefined;
-    return api.getImageUrl(rawUrl);
-  };
-
-  // Общие стили для кнопок навигации
+  // Стили для шапки (Header) - дублируем, чтобы выглядело одинаково
   const navButtonStyle: React.CSSProperties = {
     textDecoration: 'none',
     color: '#33290A',
@@ -73,168 +52,200 @@ const HomePage: React.FC = () => {
     backgroundColor: 'transparent',
   };
 
+  const renderHeader = () => (
+    <header
+      className="shadow-element"
+      style={{
+        height: '120px',
+        backgroundColor: 'white',
+        padding: '0 40px',
+        marginBottom: '30px',
+        borderRadius: '0 0 10px 10px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <h1 style={{ fontSize: '32px', color: '#33290A', fontWeight: 'bold', margin: 0 }}>
+          Chrono Archives
+        </h1>
+      </Link>
+
+      <nav style={{ display: 'flex', gap: '15px' }}>
+        <Link
+          to="/landing"
+          style={{
+            ...navButtonStyle,
+            border: 'none',
+            fontSize: '18px'
+          }}
+        >
+          Главная
+        </Link>
+        <Link to="/chrono" style={navButtonStyle}>
+          Летопись
+        </Link>
+      </nav>
+    </header>
+  );
+
+  const wordsList = layer?.words?.split(',').map((w) => w.trim()).filter((w) => w.length > 0) ?? [];
+
+  const getYears = () => {
+      const from = layer?.from_year ?? layer?.fromyear ?? undefined;
+      const to = layer?.to_year ?? layer?.toyear ?? undefined;
+      if (from && to) return `${from} – ${to}`;
+      if (from) return `c ${from}`;
+      if (to) return `до ${to}`;
+      return '';
+  };
+
+  const renderImage = () => {
+    const rawUrl = layer?.image_url || layer?.imageurl;
+    if (!rawUrl) return null;
+    const src = api.getImageUrl(rawUrl);
+    return (
+      <img
+        src={src}
+        alt={layer?.name}
+        style={{
+          width: '100%',
+          maxHeight: '400px',
+          objectFit: 'cover',
+          borderRadius: '10px',
+          marginTop: '20px',
+        }}
+      />
+    );
+  };
+
+  if (loading) {
+    return (
+      <div className="container">
+        {renderHeader()}
+        <p style={{ textAlign: 'center', fontSize: '18px', color: '#675E45' }}>Загрузка...</p>
+      </div>
+    );
+  }
+
+  if (!layer) {
+    return (
+      <div className="container">
+        {renderHeader()}
+        <p style={{ textAlign: 'center', fontSize: '18px', color: '#675E45' }}>Слой не найден.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="container">
-      {/* ОБНОВЛЕННАЯ ШАПКА */}
-      <header
-        className="shadow-element"
-        style={{
-          height: '120px', // Чуть компактнее, так как контент теперь в ширину
-          backgroundColor: 'white',
-          padding: '0 40px', // Отступы по бокам
-          marginBottom: '30px',
-          borderRadius: '0 0 10px 10px',
-          display: 'flex',
-          justifyContent: 'space-between', // Разносим лого и кнопки по краям
-          alignItems: 'center',
-        }}
-      >
-        {/* Логотип / Название */}
-        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <h1
-            style={{
-              fontSize: '32px', // Чуть меньше для аккуратности
-              color: '#33290A',
-              fontWeight: 'bold',
-              margin: 0,
-            }}
-          >
-            Chrono Archives
-          </h1>
-        </Link>
+      {renderHeader()}
 
-        <nav style={{ display: 'flex', gap: '15px' }}>
-          <Link
-            to="/landing"
-            style={{
-              ...navButtonStyle,
-              border: 'none',
-              fontSize: '18px'
-            }}
-          >
-            Главная
-          </Link>
-
-          <Link
-            to="/chrono"
-            style={navButtonStyle}
-          >
-            Летопись {cartCount > 0 && `(${cartCount})`}
-          </Link>
-        </nav>
-      </header>
-
-      <div className="search-container">
-        <form
-          id="search-form"
-          className="search-bar shadow-element"
-          onSubmit={handleSearch}
+      <div style={{ maxWidth: '1000px', margin: '0 auto 40px' }}>
+        <div
+          className="shadow-element"
+          style={{
+            backgroundColor: 'white',
+            padding: '30px',
+            borderRadius: '10px',
+            marginBottom: '30px',
+          }}
         >
-          <input
-            type="text"
-            placeholder="Введите автора, период или ключевые слова"
-            value={searchQuery}
-            onChange={(e) => dispatch(setGlobalSearchQuery(e.target.value))}
-          />
-        </form>
+          <h2
+            style={{
+              fontSize: '36px',
+              fontWeight: 800,
+              color: '#33290A',
+              marginBottom: '10px',
+              margin: '0 0 10px 0',
+            }}
+          >
+            {layer.name}
+          </h2>
 
-        <div className="search-button shadow-element">
-          <button type="submit" form="search-form">
-            Найти
-          </button>
+          {getYears() && (
+            <p
+              style={{
+                fontSize: '18px',
+                color: '#B39223',
+                fontWeight: 600,
+                marginBottom: '20px',
+                margin: '0 0 20px 0',
+              }}
+            >
+              {getYears()}
+            </p>
+          )}
+
+          {layer.description && (
+            <div
+              style={{
+                fontSize: '16px',
+                lineHeight: 1.8,
+                color: '#675E45',
+              }}
+            >
+              {layer.description}
+            </div>
+          )}
+
+          {renderImage()}
         </div>
 
-        <div className="cart-button shadow-element">
-          <Link to="/chrono" style={{ position: 'relative' }}>
-            <span className="cart-icon">🛒</span>
-          </Link>
-        </div>
-      </div>
-
-      <main>
-        {layers && layers.length > 0 ? (
-          <div className="chrono-container">
-            {layers.map((layer) => (
-              <div key={layer.id} className="chrono-card-wrapper HOVER">
-                <Link
-                  to={`/layer/${layer.id}`}
+        {wordsList.length > 0 && (
+          <div
+            className="shadow-element"
+            style={{
+              backgroundColor: 'white',
+              padding: '30px',
+              borderRadius: '10px',
+              marginBottom: '30px',
+            }}
+          >
+            <h3
+              style={{
+                fontSize: '24px',
+                fontWeight: 800,
+                color: '#33290A',
+                marginBottom: '20px',
+                margin: '0 0 20px 0',
+              }}
+            >
+              Ключевые слова
+            </h3>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '12px',
+              }}
+            >
+              {wordsList.map((word, idx) => (
+                <span
+                  key={idx}
                   style={{
-                    textDecoration: 'none',
-                    display: 'block',
-                    height: '100%',
+                    backgroundColor: '#F0EDE3',
+                    color: '#33290A',
+                    padding: '10px 16px',
+                    borderRadius: '20px',
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    border: '1px solid #D4CFC0',
+                    boxShadow: '0 2px 8px rgba(51, 41, 10, 0.08)',
+                    transition: 'all 0.2s ease',
+                    cursor: 'default',
                   }}
                 >
-                  <div className="chrono-card shadow-element">
-                    {getImageSrc(layer) && (
-                      <img
-                        src={getImageSrc(layer)}
-                        alt={layer.name}
-                        className="chrono-card-image"
-                        style={{
-                          width: '100%',
-                          height: '160px',
-                          objectFit: 'cover',
-                          display: 'block',
-                          margin: 0,
-                          padding: 0,
-                        }}
-                      />
-                    )}
-                    <div className="chrono-info">
-                      <h2
-                        style={{
-                          fontSize: '20px',
-                          color: '#33290A',
-                          marginBottom: '12px',
-                          fontWeight: 'bold',
-                          textAlign: 'center',
-                          margin: 0,
-                        }}
-                      >
-                        {layer.name}
-                      </h2>
-                      {layer.description && (
-                        <p
-                          style={{
-                            fontSize: '14px',
-                            color: '#675E45',
-                            textAlign: 'center',
-                            margin: 0,
-                            lineHeight: 1.4,
-                          }}
-                        >
-                          {layer.description}
-                        </p>
-                      )}
-                      <div
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          padding: '10px',
-                          color: '#B39223',
-                          fontSize: '16px',
-                          fontWeight: 600,
-                          textAlign: 'center',
-                          textDecoration: 'none',
-                          marginTop: 'auto',
-                        }}
-                      >
-                        Подробнее
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="no-results">
-            <p>По вашему запросу ничего не найдено</p>
+                  {word}
+                </span>
+              ))}
+            </div>
           </div>
         )}
-      </main>
+      </div>
     </div>
   );
 };
 
-export default HomePage;
+export default LayerDetailPage;

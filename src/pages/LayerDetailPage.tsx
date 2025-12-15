@@ -36,13 +36,12 @@ const LayerDetailPage: React.FC = () => {
     loadLayer();
   }, [id]);
 
-  // Стили для шапки (Header) - дублируем, чтобы выглядело одинаково
   const navButtonStyle: React.CSSProperties = {
     textDecoration: 'none',
     color: '#33290A',
     fontWeight: 'bold',
     fontSize: '16px',
-    padding: '10px 20px',
+    padding: '8px 16px',
     borderRadius: '25px',
     border: '2px solid #33290A',
     transition: 'all 0.2s ease',
@@ -50,29 +49,28 @@ const LayerDetailPage: React.FC = () => {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
+    whiteSpace: 'nowrap',
   };
 
   const renderHeader = () => (
     <header
-      className="shadow-element"
+      className="shadow-element header-responsive"
       style={{
-        height: '120px',
         backgroundColor: 'white',
-        padding: '0 40px',
-        marginBottom: '30px',
         borderRadius: '0 0 10px 10px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginBottom: '30px',
       }}
     >
       <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-        <h1 style={{ fontSize: '32px', color: '#33290A', fontWeight: 'bold', margin: 0 }}>
+        <h1 className="logo-text" style={{ color: '#33290A', fontWeight: 'bold', margin: 0 }}>
           Chrono Archives
         </h1>
       </Link>
 
-      <nav style={{ display: 'flex', gap: '15px' }}>
+      <nav style={{ display: 'flex', gap: '10px' }}>
         <Link
           to="/landing"
           style={{
@@ -120,10 +118,37 @@ const LayerDetailPage: React.FC = () => {
     );
   };
 
+  // Обертка с глобальными стилями для медиа-запросов
+  const styles = (
+      <style>{`
+        /* Desktop Defaults */
+        .header-responsive { height: 120px; padding: 0 40px; }
+        .logo-text { font-size: 32px; }
+        .content-card { padding: 30px; }
+        .layer-title { font-size: 36px; }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .header-responsive {
+                height: auto;
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .logo-text { font-size: 28px; }
+
+            .content-card { padding: 20px; } /* Уменьшаем паддинг карточки */
+            .layer-title { font-size: 28px; } /* Уменьшаем заголовок */
+        }
+      `}</style>
+  );
+
   if (loading) {
     return (
       <div className="container">
         {renderHeader()}
+        {styles}
         <p style={{ textAlign: 'center', fontSize: '18px', color: '#675E45' }}>Загрузка...</p>
       </div>
     );
@@ -133,28 +158,29 @@ const LayerDetailPage: React.FC = () => {
     return (
       <div className="container">
         {renderHeader()}
+        {styles}
         <p style={{ textAlign: 'center', fontSize: '18px', color: '#675E45' }}>Слой не найден.</p>
       </div>
     );
   }
 
   return (
-    <div className="container">
+    <div className="container" style={{ paddingBottom: '40px' }}>
       {renderHeader()}
+      {styles}
 
-      <div style={{ maxWidth: '1000px', margin: '0 auto 40px' }}>
+      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
         <div
-          className="shadow-element"
+          className="shadow-element content-card"
           style={{
             backgroundColor: 'white',
-            padding: '30px',
             borderRadius: '10px',
             marginBottom: '30px',
           }}
         >
           <h2
+            className="layer-title"
             style={{
-              fontSize: '36px',
               fontWeight: 800,
               color: '#33290A',
               marginBottom: '10px',
@@ -195,10 +221,9 @@ const LayerDetailPage: React.FC = () => {
 
         {wordsList.length > 0 && (
           <div
-            className="shadow-element"
+            className="shadow-element content-card"
             style={{
               backgroundColor: 'white',
-              padding: '30px',
               borderRadius: '10px',
               marginBottom: '30px',
             }}
