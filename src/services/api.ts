@@ -6,11 +6,12 @@ declare global {
   }
 }
 
+// ...
 const IS_GITHUB = window.location.hostname.includes('github.io');
 const IS_TAURI = import.meta.env.VITE_IS_TAURI === 'true';
 const IS_DEV = import.meta.env.DEV;
 
-const USE_MOCK = IS_GITHUB;
+const USE_MOCK = false;
 
 let API_BASE = '';
 
@@ -18,12 +19,10 @@ if (IS_TAURI) {
   API_BASE = 'http://172.20.10.3:8080/api';
 } else if (IS_DEV) {
   API_BASE = '/api';
+} else if (IS_GITHUB) {
+  API_BASE = 'http://172.20.10.3:8080/api';
 } else {
   API_BASE = 'http://localhost:8080/api';
-}
-
-if (window.location.hostname.includes('github.io')) {
-    API_BASE = 'http://172.20.10.3:8080/api';
 }
 
 interface Layer {
