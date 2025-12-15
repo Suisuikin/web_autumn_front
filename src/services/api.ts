@@ -22,6 +22,10 @@ if (IS_TAURI) {
   API_BASE = 'http://localhost:8080/api';
 }
 
+if (window.location.hostname.includes('github.io')) {
+    API_BASE = 'http://172.20.10.3:8080/api';
+}
+
 interface Layer {
   id: number;
   name: string;
