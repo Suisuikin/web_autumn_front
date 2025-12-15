@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 
+const BASE_PATH = process.env.GITHUB_PAGES ? '/web_autumn_front/' : '/';
+
 export default defineConfig({
   plugins: [
     react(),
@@ -16,9 +18,11 @@ export default defineConfig({
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
-        scope: '/',
-        start_url: '/',
         orientation: 'portrait',
+
+        scope: BASE_PATH,
+        start_url: BASE_PATH,
+
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -37,7 +41,7 @@ export default defineConfig({
     })
   ],
 
-  base: process.env.GITHUB_PAGES ? '/web_autumn_front/' : '/',
+  base: BASE_PATH,
 
   build: {
     outDir: 'dist',
