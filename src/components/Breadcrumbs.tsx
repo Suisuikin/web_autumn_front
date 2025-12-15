@@ -11,26 +11,28 @@ const Breadcrumbs: React.FC = () => {
   const location = useLocation();
 
   const getBreadcrumbs = (): BreadcrumbItem[] => {
-    const paths = location.pathname.split('/').filter(x => x);
+    const paths = location.pathname.split('/').filter((x) => x);
     const breadcrumbs: BreadcrumbItem[] = [{ label: 'Главная', path: '/' }];
 
     if (paths.length === 0) return breadcrumbs;
 
-    if (paths === 'services') {
+    if (paths[0] === 'services') {
       breadcrumbs.push({ label: 'Услуги', path: '/services' });
 
       if (paths.length > 1) {
+        const id = paths[1];
         breadcrumbs.push({
-          label: `Услуга #${paths}`,
-          path: `/services/${paths}`
+          label: `Услуга #${id}`,
+          path: `/services/${id}`,
         });
       }
     }
 
-    if (paths === 'orders' && paths.length > 1) {
+    if (paths[0] === 'orders' && paths.length > 1) {
+      const id = paths[1];
       breadcrumbs.push({
-        label: `Заявка #${paths}`,
-        path: `/orders/${paths}`
+        label: `Заявка #${id}`,
+        path: `/orders/${id}`,
       });
     }
 

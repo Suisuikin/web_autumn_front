@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Service } from '../store/types/service.types';
 
 interface ServiceCardProps {

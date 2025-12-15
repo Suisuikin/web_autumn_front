@@ -22,37 +22,54 @@ export const serviceFilterSlice = createSlice({
   name: 'serviceFilter',
   initialState,
   reducers: {
-    // Типизированные reducers с PayloadAction
-    setFilterName: (state, action: PayloadAction<string>) => {
+    setFilterName: (
+      state: ServiceFilterState,
+      action: PayloadAction<string>,
+    ) => {
       state.filters.name = action.payload;
     },
 
-    setFilterPriceMin: (state, action: PayloadAction<number>) => {
+    setFilterPriceMin: (
+      state: ServiceFilterState,
+      action: PayloadAction<number>,
+    ) => {
       state.filters.priceMin = action.payload;
     },
 
-    setFilterPriceMax: (state, action: PayloadAction<number>) => {
+    setFilterPriceMax: (
+      state: ServiceFilterState,
+      action: PayloadAction<number>,
+    ) => {
       state.filters.priceMax = action.payload;
     },
 
-    setFilterDateFrom: (state, action: PayloadAction<string>) => {
+    setFilterDateFrom: (
+      state: ServiceFilterState,
+      action: PayloadAction<string>,
+    ) => {
       state.filters.dateFrom = action.payload;
     },
 
-    setFilterDateTo: (state, action: PayloadAction<string>) => {
+    setFilterDateTo: (
+      state: ServiceFilterState,
+      action: PayloadAction<string>,
+    ) => {
       state.filters.dateTo = action.payload;
     },
 
-    applyFilters: (state) => {
+    applyFilters: (state: ServiceFilterState) => {
       state.lastAppliedFilters = { ...state.filters };
     },
 
-    resetFilters: (state) => {
+    resetFilters: (state: ServiceFilterState) => {
       state.filters = { ...initialState.filters };
       state.lastAppliedFilters = { ...initialState.filters };
     },
 
-    restoreFilters: (state, action: PayloadAction<ServiceFilter>) => {
+    restoreFilters: (
+      state: ServiceFilterState,
+      action: PayloadAction<ServiceFilter>,
+    ) => {
       state.lastAppliedFilters = action.payload;
       state.filters = action.payload;
     },
