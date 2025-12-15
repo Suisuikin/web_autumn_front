@@ -11,16 +11,14 @@ interface Layer {
   imageurl?: string;
 }
 
-const isTauri = import.meta.env.VITE_IS_TAURI === 'true';
-const homePath = (import.meta.env.PROD && !isTauri) ? '/web_autumn_front/' : '/';
-
 const HomePage: React.FC = () => {
   const [layers, setLayers] = useState<Layer[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [cartCount, setCartCount] = useState(0);
 
-  // Вычисляем правильный путь "Домой"
-  const homePath = import.meta.env.PROD ? '/web_autumn_front/' : '/';
+  const homePath = window.location.hostname.includes('github.io')
+    ? '/web_autumn_front/'
+    : '/';
 
   useEffect(() => {
     const loadInitialData = async () => {
@@ -71,7 +69,7 @@ const HomePage: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        {/* ИСПРАВЛЕННАЯ ССЫЛКА */}
+        {/* ССЫЛКА ТЕПЕРЬ РАБОТАЕТ ВЕЗДЕ */}
         <a href={homePath} style={{ textDecoration: 'none', color: 'inherit' }}>
           <h1
             style={{

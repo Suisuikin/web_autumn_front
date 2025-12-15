@@ -1,6 +1,6 @@
 // src/pages/LayerDetailPage.tsx
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import api from '../services/api';
 
 interface Layer {
@@ -16,15 +16,15 @@ interface Layer {
   toyear?: number;
 }
 
-const isTauri = import.meta.env.VITE_IS_TAURI === 'true';
-const homePath = (import.meta.env.PROD && !isTauri) ? '/web_autumn_front/' : '/';
-
 const LayerDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [layer, setLayer] = useState<Layer | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const homePath = import.meta.env.PROD ? '/web_autumn_front/' : '/';
+  // Единая логика пути домой
+  const homePath = window.location.hostname.includes('github.io')
+    ? '/web_autumn_front/'
+    : '/';
 
   useEffect(() => {
     const loadLayer = async () => {
