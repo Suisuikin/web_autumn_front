@@ -1,5 +1,3 @@
-// src/services/api.ts
-
 import MockApiClient from './mockApi';
 
 const USE_MOCK = true;
@@ -57,8 +55,6 @@ class ApiClient {
 
   private async request<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${API_BASE}${endpoint}`;
-
-    // Нормально мёрджим базовые заголовки и переданные извне
     const defaultHeaders = this.getHeaders();
     const mergedHeaders: HeadersInit = {
       ...defaultHeaders,
@@ -77,7 +73,6 @@ class ApiClient {
         throw new Error(`API Error: ${response.status}`);
       }
 
-      // На всякий случай корректно обрабатываем 204 No Content
       if (response.status === 204) {
         return null as T;
       }
@@ -87,7 +82,6 @@ class ApiClient {
         return (await response.json()) as T;
       }
 
-      // Если бек вернул не JSON (например, текст/HTML/файл)
       return (await response.text()) as unknown as T;
     } catch (error) {
       console.error(`Request to ${endpoint} failed:`, error);
@@ -199,13 +193,26 @@ class ApiClient {
     });
   }
 
-  // Helper function to get image URL
   getImageUrl(imageUrl?: string) {
-    if (USE_MOCK) return MockApiClient.getImageUrl(imageUrl);
-    if (!imageUrl) return '/placeholder.jpg';
-    return imageUrl.startsWith('http')
-      ? imageUrl
-      : `http://localhost:8080${imageUrl}`;
+    const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+    if (!imageUrl) return `${BASE}/images/placeholder.jpg`;
+
+    if (imageUrl.startsWith('http')) {
+      return imageUrl;
+    }
+
+    if (USE_MOCK) {
+      if (imageUrl.startsWith(BASE)) {
+        return imageUrl;
+      }
+      if (imageUrl.startsWith('/')) {
+        return `${BASE}${imageUrl}`;
+      }
+      return `${BASE}/${imageUrl}`;
+    }
+
+    return `http://localhost:8080${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
   }
 }
 

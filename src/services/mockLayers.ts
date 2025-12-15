@@ -11,12 +11,14 @@ export interface MockLayer {
   status: string;
 }
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 export const MOCK_LAYERS: MockLayer[] = [
   {
     id: 1,
     name: "Средневековый слой (XI-XV вв.) - обновлённый",
     description: "Расширенная лексика древнерусского периода",
-    image_url: "http://127.0.0.1:9000/chrono/1_1761001602469308798.jpg",
+    image_url: `${BASE}/images/img.png`,
     from_year: 1000,
     to_year: 1500,
     words: "дружина,князь,воевода,гридь,тиун,вече,боярин,отрок,кормилец,тысяцкий",
