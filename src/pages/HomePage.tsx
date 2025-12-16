@@ -55,7 +55,7 @@ const HomePage: React.FC = () => {
     return api.getImageUrl(rawUrl);
   };
 
-  // Общие стили для кнопок навигации
+  // Стили для кнопок навигации
   const navButtonStyle: React.CSSProperties = {
     textDecoration: 'none',
     color: '#33290A',
@@ -70,33 +70,40 @@ const HomePage: React.FC = () => {
     justifyContent: 'center',
     backgroundColor: 'transparent',
     whiteSpace: 'nowrap',
+    cursor: 'pointer',
   };
 
   return (
-    <div className="container" style={{ paddingBottom: '40px' }}>
-      {/* АДАПТИВНАЯ ШАПКА */}
+    <div className="container">
+      {/* ИЗМЕНЕН ТОЛЬКО HEADER */}
       <header
-        className="shadow-element header-responsive"
+        className="shadow-element"
         style={{
+          height: '120px', // Немного компактнее
           backgroundColor: 'white',
+          padding: '0 40px', // Отступы по бокам для кнопок
+          marginBottom: '30px',
           borderRadius: '0 0 10px 10px',
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'space-between', // Разносим лого и меню
           alignItems: 'center',
-          marginBottom: '30px',
         }}
       >
         <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <h1 className="logo-text" style={{
-            color: '#33290A',
-            fontWeight: 'bold',
-            margin: 0,
-          }}>
+          <h1
+            style={{
+              fontSize: '32px',
+              color: '#33290A',
+              fontWeight: 'bold',
+              margin: 0,
+            }}
+          >
             Chrono Archives
           </h1>
         </Link>
 
-        <nav style={{ display: 'flex', gap: '10px' }}>
+        {/* Добавлены кнопки */}
+        <nav style={{ display: 'flex', gap: '15px' }}>
           <Link
             to="/landing"
             style={{
@@ -112,25 +119,22 @@ const HomePage: React.FC = () => {
             to="/chrono"
             style={navButtonStyle}
           >
-            Летопись
+            Летопись {cartCount > 0 && `(${cartCount})`}
           </Link>
         </nav>
       </header>
 
-      {/* ПОИСК */}
-      <div className="search-container responsive-search">
+      <div className="search-container">
         <form
           id="search-form"
           className="search-bar shadow-element"
           onSubmit={handleSearch}
-          style={{ flexGrow: 1 }}
         >
           <input
             type="text"
-            placeholder="Поиск по автору или периоду..."
+            placeholder="Введите автора, период или ключевые слова"
             value={searchQuery}
             onChange={(e) => dispatch(setGlobalSearchQuery(e.target.value))}
-            style={{ width: '100%', padding: '12px', border: 'none', outline: 'none', fontSize: '16px', borderRadius: '10px' }}
           />
         </form>
 
@@ -140,7 +144,7 @@ const HomePage: React.FC = () => {
           </button>
         </div>
 
-        <div className="cart-button shadow-element mobile-hidden">
+        <div className="cart-button shadow-element">
           <Link to="/chrono" style={{ position: 'relative' }}>
             <span className="cart-icon">🛒</span>
           </Link>
@@ -148,6 +152,7 @@ const HomePage: React.FC = () => {
       </div>
 
       <main>
+        {/* КАРТОЧКИ ОСТАВЛЕНЫ КАК БЫЛИ */}
         {layers && layers.length > 0 ? (
           <div className="chrono-container">
             {layers.map((layer) => (
@@ -197,11 +202,6 @@ const HomePage: React.FC = () => {
                             textAlign: 'center',
                             margin: 0,
                             lineHeight: 1.4,
-                            // Ограничение строк для описания
-                            display: '-webkit-box',
-                            WebkitLineClamp: 3,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
                           }}
                         >
                           {layer.description}
@@ -234,50 +234,6 @@ const HomePage: React.FC = () => {
           </div>
         )}
       </main>
-
-      {/* СТИЛИ АДАПТИВНОСТИ */}
-      <style>{`
-        /* Дефолтные стили (Desktop) */
-        .header-responsive { height: 120px; padding: 0 40px; }
-        .logo-text { font-size: 32px; }
-        .responsive-search { display: flex; gap: 15px; margin-bottom: 30px; align-items: center; }
-        .search-bar { flex-grow: 1; }
-        .chrono-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-        }
-        .mobile-hidden { display: block; }
-
-        /* Мобильные стили */
-        @media (max-width: 768px) {
-            .header-responsive {
-                height: auto;
-                padding: 20px;
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            .logo-text { font-size: 28px; }
-
-            .responsive-search {
-                flex-direction: column;
-                gap: 10px;
-                width: 100%;
-            }
-            .search-bar { width: 100%; }
-            .search-button { width: 100%; }
-            .search-button button { width: 100%; }
-
-            /* Скрываем старую кнопку корзины, так как она есть в меню */
-            .mobile-hidden { display: none; }
-
-            .chrono-container {
-                grid-template-columns: 1fr; /* Одна колонка */
-                gap: 20px;
-            }
-        }
-      `}</style>
     </div>
   );
 };
