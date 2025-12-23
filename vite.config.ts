@@ -33,14 +33,14 @@ export default defineConfig({
   },
 
   server: {
-    port: 5173,
-    host: true, // Это позволяет заходить по IP
+    port: 59830,
+    host: true,
+    strictPort: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080', // <--- ИСПРАВЛЕНО НА 8080
+        target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
-        // rewrite: (path) => path.replace(/^\/api/, ''), // <--- УДАЛЕНО (так как в Go есть /api)
       },
     },
   },
