@@ -119,7 +119,7 @@ const HomePage: React.FC = () => {
             to="/chrono"
             style={navButtonStyle}
           >
-            Летопись {cartCount > 0 && `(${cartCount})`}
+            Летопись
           </Link>
         </nav>
       </header>
